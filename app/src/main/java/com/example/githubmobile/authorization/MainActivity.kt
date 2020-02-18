@@ -3,35 +3,38 @@ package com.example.githubmobile.authorization
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.githubmobile.placeholder_activity.PlaceHolderActivity
 import com.example.githubmobile.R
-import com.example.githubmobile.api.RetrofitClient
+import com.example.githubmobile.models.AccessToken
 import com.example.githubmobile.showToast
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
-    private  val clientId = "Iv1.6d9b7fd23d2a7b19"
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
+
+class MainActivity : AppCompatActivity(), AuthorizationListener, KodeinAware {
+    private val clientId = "Iv1.6d9b7fd23d2a7b19"
     private val redirectUri = "github://callback"
-    lateinit var authorizationViewModel: MainActivityViewModel
 
+    private lateinit var authorizationViewModel: AuthorizationViewModel
+    override val kodein by kodein()
+    private val factory : AuthorizationViewModelFactory by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        authorizationViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        authorizationViewModel = ViewModelProvider(this, factory).get(AuthorizationViewModel::class.java)
+        authorizationViewModel.authorizationListener = this
 
-        authorizationViewModel.accessToken.observe(this, Observer {
-            showToast(it.accessToken)
-        })
+        b_authorize.setOnClickListener {
+            authorize()
+        }
     }
 
     private fun authorize() {
@@ -46,7 +49,21 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val code = intent.data?.getQueryParameter("code")
         code?.let {
-            authorizationViewModel.getAccessToken(code)
+            authorizationViewModel.callbackHandled(code)
         }
     }
+
+    override fun successAuthorization(accessToken: LiveData<AccessToken>) {
+        showToast("Success authorization")
+        accessToken.observe(this, Observer {
+            intent = Intent(this@MainActivity, PlaceHolderActivity::class.java)
+            intent.putExtra("access_token", it.accessToken)
+            startActivity(intent)
+            finish()
+        })
+    }
+
+
+
+
 }
