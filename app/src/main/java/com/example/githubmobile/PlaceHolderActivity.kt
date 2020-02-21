@@ -1,4 +1,4 @@
-package com.example.githubmobile.placeholder_activity
+package com.example.githubmobile
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,16 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
-import com.example.githubmobile.R
 import com.example.githubmobile.authorization.MainActivity
-import com.example.githubmobile.github_repos.GithubReposFragment
-import com.example.githubmobile.profile.ProfileFragment
-import com.example.githubmobile.search.SearchFragment
-import com.example.githubmobile.showToast
+import com.example.githubmobile.github_repos.my_repos.GithubReposFragment
+import com.example.githubmobile.github_repos.search_repos.SearchActivity
+import com.example.githubmobile.user_profile.ProfileFragment
+import com.example.githubmobile.user_profile.UserViewModel
+import com.example.githubmobile.user_profile.UserViewModelFactory
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_place_holder.*
 import kotlinx.android.synthetic.main.nav_header.view.*
@@ -27,9 +26,10 @@ import org.kodein.di.generic.instance
 
 class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, KodeinAware {
     override val kodein by kodein()
-    private val factory: PlaceHolderViewModelFactory by instance()
-    private lateinit var placeHolderViewModel: PlaceHolderViewModel
-
+    private val factory: UserViewModelFactory by instance()
+    private lateinit var userViewModel: UserViewModel
+    private val prefs: SharedPrefsProvider by instance()
+    private var selectedItem = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_place_holder)
@@ -40,15 +40,18 @@ class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment())
+                .replace(
+                    R.id.fragment_container,
+                    ProfileFragment()
+                )
                 .commit()
             nav_view.setCheckedItem(R.id.nav_user)
         }
 
-        placeHolderViewModel = ViewModelProvider(this, factory).get(PlaceHolderViewModel::class.java)
-        placeHolderViewModel.updateUserInfo()
-        placeHolderViewModel.user.observe(this, Observer{
-            with(nav_view.getHeaderView(0)){
+        userViewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
+        userViewModel.updateUserInfo()
+        userViewModel.user.observe(this, Observer {
+            with(nav_view.getHeaderView(0)) {
                 header_register_date.text = it.created_at
                 header_username.text = it.login
                 Glide.with(this@PlaceHolderActivity)
@@ -56,6 +59,7 @@ class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItem
                     .into(header_icon)
 
             }
+
         })
 
 
@@ -75,8 +79,14 @@ class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         drawer_layout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
+
         nav_view.setNavigationItemSelectedListener(this)
-        nav_view.getHeaderView(0).header_username.text = "aue"
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        nav_view.menu.getItem(selectedItem).isChecked = true
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -92,27 +102,33 @@ class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_user -> {
+                selectedItem = 0
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_container, ProfileFragment())
+                    .replace(
+                        R.id.fragment_container,
+                        ProfileFragment()
+                    )
                     .commit()
             }
             R.id.nav_repos -> {
+                selectedItem = 1
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_container, GithubReposFragment())
+                    .replace(R.id.fragment_container,
+                        GithubReposFragment()
+                    )
                     .commit()
             }
             R.id.nav_logout -> {
+                prefs.removeAccessToken()
                 showToast("Logged out")
                 startActivity(Intent(this@PlaceHolderActivity, MainActivity::class.java))
                 finish()
             }
             R.id.nav_search -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, SearchFragment())
-                    .commit()
+                selectedItem = 0
+                startActivity(Intent(this@PlaceHolderActivity, SearchActivity::class.java))
             }
         }
 

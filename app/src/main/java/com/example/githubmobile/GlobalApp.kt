@@ -1,13 +1,15 @@
 package com.example.githubmobile
 
 import android.app.Application
-import com.example.githubmobile.networking.AuthGithubApi
-import com.example.githubmobile.networking.NetworkConnectionInterceptor
 import com.example.githubmobile.authorization.AuthorizationRepository
 import com.example.githubmobile.authorization.AuthorizationViewModelFactory
-import com.example.githubmobile.networking.GithubApi
-import com.example.githubmobile.placeholder_activity.PlaceHolderRepository
-import com.example.githubmobile.placeholder_activity.PlaceHolderViewModelFactory
+import com.example.githubmobile.github_repos.GithubReposRepository
+import com.example.githubmobile.github_repos.my_repos.GithubReposViewModelFactory
+import com.example.githubmobile.github_repos.search_repos.SearchActivityViewModelFactory
+import com.example.githubmobile.networking.NetworkConnectionInterceptor
+import com.example.githubmobile.networking.RetrofitClient
+import com.example.githubmobile.user_profile.UserRepository
+import com.example.githubmobile.user_profile.UserViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -21,18 +23,23 @@ class GlobalApp : Application(), KodeinAware{
         import(androidXModule(this@GlobalApp))
 
         //Authorization
+        bind() from singleton { RetrofitClient }
         bind() from singleton { NetworkConnectionInterceptor(instance()) }
-        bind() from singleton { AuthGithubApi(instance()) }
         bind() from singleton { SharedPrefsProvider(instance()) }
         bind() from singleton { AuthorizationRepository(instance(), instance())}
         bind() from singleton { AuthorizationViewModelFactory(instance()) }
 
+        //User
+        bind() from singleton { UserRepository(instance(), instance()) }
+        bind() from singleton { UserViewModelFactory(instance())}
 
-        //Placeholder activity
-        bind() from singleton { GithubApi(instance()) }
-        bind() from singleton { PlaceHolderRepository(instance(), instance()) }
-        bind() from singleton { PlaceHolderViewModelFactory(instance())}
+        //Repositories
+        bind() from singleton { GithubReposRepository(instance(), instance()) }
+        bind() from singleton { GithubReposViewModelFactory(instance())}
+
+
+        //search repositories
+        bind() from singleton { SearchActivityViewModelFactory(instance()) }
     }
-
 
 }

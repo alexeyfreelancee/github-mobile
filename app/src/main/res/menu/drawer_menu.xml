@@ -6,17 +6,20 @@
     <group
         android:id="@+id/first_group"
         android:checkableBehavior="single">
-        <item android:id="@+id/nav_user"
+        <item
+            android:id="@+id/nav_user"
             android:icon="@drawable/ic_user"
-            android:title="Profile"/>
+            android:title="Profile" />
 
-        <item android:id="@+id/nav_repos"
+        <item
+            android:id="@+id/nav_repos"
             android:icon="@drawable/ic_repos"
-            android:title="Repositories"/>
+            android:title="Repositories" />
 
-        <item android:id="@+id/nav_search"
+        <item
+            android:id="@+id/nav_search"
             android:icon="@drawable/ic_search"
-            android:title="Search"/>
+            android:title="Search" />
     </group>
 
 
@@ -24,12 +27,12 @@
         android:id="@+id/second_group"
         android:checkableBehavior="single">
 
-        <menu>
 
-            <item android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_logout"
-                android:title="Log out"/>
-        </menu>
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Log out" />
+
     </group>
 
 

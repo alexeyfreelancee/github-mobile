@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:layout_marginBottom="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_marginBottom="8dp"
+            android:id="@+id/repo_image"
+            android:layout_width="42dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:layout_alignParentTop="true"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/repo_image"
+            android:id="@+id/repo_title"
+            android:text="title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:text="Java"
+            android:id="@+id/repo_lang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <ImageView
+
+            android:layout_below="@id/repo_description"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/star_ic"
+
+            android:src="@drawable/ic_star"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
+        <TextView
+            android:layout_below="@id/repo_description"
+            android:textSize="14sp"
+            android:text="0"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@id/star_ic"
+
+            android:id="@+id/repo_stars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:layout_below="@id/repo_title"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/repo_image"
+            android:textSize="14sp"
+            android:text="Descriptoin"
+            android:id="@+id/repo_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+
+
+        <ImageView
+            android:layout_below="@id/repo_description"
+            android:id="@+id/username_ic"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@id/repo_stars"
+            android:src="@drawable/ic_user"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
+        <TextView
+            android:layout_below="@id/repo_description"
+            android:textSize="14sp"
+            android:text="username"
+            android:layout_toEndOf="@id/username_ic"
+            android:id="@+id/repo_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>
