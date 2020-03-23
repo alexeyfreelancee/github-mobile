@@ -1,11 +1,8 @@
-package com.example.githubmobile.github_repos.search_repos
+package com.example.githubmobile.github_repos.my_repos
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import com.example.githubmobile.data.source.FakeTestRepository
-import com.example.githubmobile.data.models.github_repository.GithubRepo
 import com.example.githubmobile.utils.getOrAwaitValue
-import junit.framework.Assert.assertNotNull
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -16,19 +13,19 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class SearchActivityViewModelTest{
-    lateinit var viewModel: SearchActivityViewModel
+class GithubReposViewModelTest {
+    lateinit var viewModel: GithubReposViewModel
     private var testDispatcher = TestCoroutineDispatcher()
     @Before
-    fun setup(){
+    fun setup() {
         Dispatchers.setMain(testDispatcher)
         val repository =
             FakeTestRepository()
-        viewModel = SearchActivityViewModel(repository)
+        viewModel = GithubReposViewModel(repository)
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         Dispatchers.resetMain()
         testDispatcher.cleanupTestCoroutines()
     }
@@ -36,11 +33,9 @@ class SearchActivityViewModelTest{
     var instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
-    fun getReposByName_repos_notNull(){
-        viewModel.name = MutableLiveData("name")
-        viewModel.getReposByName(null)
-        val repos = viewModel.repos.getOrAwaitValue()
-        assertTrue(repos.size > 0)
-
+    fun getRepos_repos_notEmpty(){
+        viewModel.getReposList()
+        val result = viewModel.reposList.getOrAwaitValue()
+        assertTrue(result.size > 0)
     }
 }

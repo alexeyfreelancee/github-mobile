@@ -34,7 +34,7 @@ class FakeTestRepository : GitRepositoryInterface {
         "avatar_url",
         "html_url",
         "location",
-        "created_at",
+        "2022-04-18T03:03:03Z",
         23,
         32,
         11
@@ -43,11 +43,11 @@ class FakeTestRepository : GitRepositoryInterface {
         UserEvent(
             "type",
             Repo("name", "url"),
-            "created_at"),
+            "2022-04-18T03:03:05Z"),
         UserEvent(
             "type1",
             Repo("name1", "url1"),
-            "created_at1"
+            "2022-04-18T03:03:07Z"
         )
     )
 

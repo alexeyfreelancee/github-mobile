@@ -42,7 +42,6 @@ class AuthorizationActivity : AppCompatActivity(), KodeinAware {
     private fun initObservers(){
         viewModel.accessToken.observe(this, Observer {token ->
             if (token.success) {
-                log(token.accessToken)
                 startPlaceHolderActivity(token.accessToken)
             } else {
                 showToast("Something went wrong...")

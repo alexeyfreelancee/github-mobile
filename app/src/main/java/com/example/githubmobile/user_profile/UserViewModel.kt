@@ -17,11 +17,11 @@ class UserViewModel(private val repository: GitRepositoryInterface) : ViewModel(
     var events: LiveData<ArrayList<UserEvent>> = _events
 
     fun updateUserInfo() = viewModelScope.launch {
-        val info = repository.getUserInfo()
-        info.apply {
+        val userData = repository.getUserInfo()
+        userData.apply {
             created_at = "Joined at ${getDate(created_at)}"
         }
-        _user.value = info
+        _user.value = userData
 
     }
 

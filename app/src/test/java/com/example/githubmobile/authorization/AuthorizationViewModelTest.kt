@@ -1,30 +1,28 @@
-package com.example.githubmobile.github_repos.search_repos
+package com.example.githubmobile.authorization
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import com.example.githubmobile.data.source.FakeTestRepository
-import com.example.githubmobile.data.models.github_repository.GithubRepo
+import com.example.githubmobile.user_profile.UserViewModel
 import com.example.githubmobile.utils.getOrAwaitValue
-import junit.framework.Assert.assertNotNull
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class SearchActivityViewModelTest{
-    lateinit var viewModel: SearchActivityViewModel
+class AuthorizationViewModelTest{
+    lateinit var viewModel: AuthorizationViewModel
     private var testDispatcher = TestCoroutineDispatcher()
     @Before
     fun setup(){
         Dispatchers.setMain(testDispatcher)
         val repository =
             FakeTestRepository()
-        viewModel = SearchActivityViewModel(repository)
+        viewModel = AuthorizationViewModel(repository)
     }
 
     @After
@@ -35,12 +33,18 @@ class SearchActivityViewModelTest{
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Test
-    fun getReposByName_repos_notNull(){
-        viewModel.name = MutableLiveData("name")
-        viewModel.getReposByName(null)
-        val repos = viewModel.repos.getOrAwaitValue()
-        assertTrue(repos.size > 0)
 
+    @Test
+    fun getAccessToken_accessToken_Updates(){
+        viewModel.getAccessToken()
+        val token = viewModel.accessToken.getOrAwaitValue()
+        assertEquals(token.accessToken, "accessToken")
+    }
+
+    @Test
+    fun getAccessTokenByCode_accessToken_Updates(){
+        viewModel.getAccessTokenByCode("code")
+        val token = viewModel.accessToken.getOrAwaitValue()
+        assertEquals(token.accessToken, "accessToken")
     }
 }
