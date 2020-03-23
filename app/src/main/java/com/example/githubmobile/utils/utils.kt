@@ -1,4 +1,4 @@
-package com.example.githubmobile
+package com.example.githubmobile.utils
 
 import android.app.Activity
 import android.util.Log
@@ -14,11 +14,11 @@ fun log(message:String){
     Log.d("tagg", message)
 }
 
-fun View.makeVisible(){
+fun View.visible(){
     this.visibility = View.VISIBLE
 }
 
 
-fun View.makeInvisible(){
+fun View.gone(){
     this.visibility= View.GONE
 }

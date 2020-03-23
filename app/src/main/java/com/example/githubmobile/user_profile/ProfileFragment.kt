@@ -12,8 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.githubmobile.R
-import com.example.githubmobile.makeInvisible
-import com.example.githubmobile.makeVisible
+import com.example.githubmobile.data.models.User
 import kotlinx.android.synthetic.main.profile_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -23,11 +22,6 @@ class ProfileFragment : Fragment(), KodeinAware {
     private val rv_adapter = UserEventsAdapter()
     override val kodein by kodein()
     private val factory: UserViewModelFactory by instance()
-
-    companion object {
-        fun newInstance() =
-            ProfileFragment()
-    }
 
     private lateinit var viewModel: UserViewModel
 
@@ -40,56 +34,30 @@ class ProfileFragment : Fragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initRecyclerView()
-
         viewModel = ViewModelProviders.of(this, factory).get(UserViewModel::class.java)
 
-        observeUserInfo()
-        observeUserEvents()
-    }
+        initRecyclerView()
+        initObservers()
 
-    private fun observeUserEvents(){
-        viewModel.updateUserEvents()
-        viewModel.events.observe(this, Observer {
-            if(it.size > 0){
-                user_empty_activity.makeInvisible()
-                rv_user_activity.makeVisible()
-                rv_adapter.createList(it)
-            } else{
-               user_empty_activity.makeInvisible()
-                rv_user_activity.makeInvisible()
-            }
-
-        })
-    }
-
-    private fun observeUserInfo(){
         viewModel.updateUserInfo()
-        viewModel.user.observe(this, Observer {
-            val user = it
-            Glide.with(context!!)
-                .load(user.avatar_url)
-                .into(user_image)
-            user_username.text = user.login
-            user_country.text = user.location
-            user_joined_at.text = user.created_at
-            user_followers.text = user.followers.toString()
-            user_following.text = user.following.toString()
-            user_repositories.text = user.public_repos.toString()
-            card_user.setOnClickListener{
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(user.html_url)
-                startActivity(intent)
-            }
+        viewModel.updateUserEvents()
+    }
+
+
+    private fun initObservers() {
+        viewModel.user.observe(this, Observer { user ->
+            initUi(user)
+        })
+
+        viewModel.events.observe(this, Observer {
+            rv_adapter.createList(it)
         })
     }
 
 
-
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         rv_user_activity.apply {
-
-            layoutManager = object: LinearLayoutManager(context){
+            layoutManager = object : LinearLayoutManager(context) {
                 override fun canScrollVertically(): Boolean {
                     return false
                 }
@@ -98,4 +66,24 @@ class ProfileFragment : Fragment(), KodeinAware {
         }
     }
 
+
+    private fun initUi(user: User) {
+        Glide.with(requireActivity().applicationContext)
+            .load(user.avatar_url)
+            .into(user_image)
+        user_username.text = user.login
+        user_country.text = user.location
+        user_joined_at.text = user.created_at
+        user_followers.text = user.followers.toString()
+        user_following.text = user.following.toString()
+        user_repositories.text = user.public_repos.toString()
+        card_user.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(user.html_url)
+            startActivity(intent)
+        }
+
+
+    }
 }
+

@@ -4,23 +4,23 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubmobile.R
-import com.example.githubmobile.models.AccessToken
-import com.example.githubmobile.showToast
+import com.example.githubmobile.utils.showToast
 import com.example.githubmobile.PlaceHolderActivity
+import com.example.githubmobile.utils.SharedPrefsProvider
+import com.example.githubmobile.utils.log
 import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity(), AuthorizationListener, KodeinAware {
+class AuthorizationActivity : AppCompatActivity(), KodeinAware {
     private val clientId = "3b97901fbec977e5e3f7"
     private val redirectUri = "github://callback"
 
-    private lateinit var authorizationViewModel: AuthorizationViewModel
+    private lateinit var viewModel: AuthorizationViewModel
 
     override val kodein by kodein()
     private val factory: AuthorizationViewModelFactory by instance()
@@ -28,20 +28,26 @@ class MainActivity : AppCompatActivity(), AuthorizationListener, KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel = ViewModelProvider(this, factory).get(AuthorizationViewModel::class.java)
 
-        authorizationViewModel =
-            ViewModelProvider(this, factory).get(AuthorizationViewModel::class.java)
-        authorizationViewModel.authorizationListener = this
-        authorizationViewModel.getAccessToken()
-        authorizationViewModel.accessToken.observe(this, Observer {
-            it?.let {
-                startPlaceHolderActivity(it)
-            }
-        })
+        initObservers()
+        viewModel.getAccessToken()
+
 
         b_authorize.setOnClickListener {
             authorize()
         }
+    }
+
+    private fun initObservers(){
+        viewModel.accessToken.observe(this, Observer {token ->
+            if (token.success) {
+                log(token.accessToken)
+                startPlaceHolderActivity(token.accessToken)
+            } else {
+                showToast("Something went wrong...")
+            }
+        })
     }
 
     private fun authorize() {
@@ -54,26 +60,14 @@ class MainActivity : AppCompatActivity(), AuthorizationListener, KodeinAware {
 
     override fun onResume() {
         super.onResume()
-        val code = intent.data?.getQueryParameter("code")
-        code?.let {
-            authorizationViewModel.callbackHandled(code)
-        }
-    }
-
-    override fun successAuthorization(accessToken: LiveData<AccessToken>) {
-        accessToken.observe(this, Observer {
-            if (it.success) {
-                startPlaceHolderActivity(it.accessToken)
-            } else {
-                showToast("Something went wrong...")
-            }
-
-        })
+        viewModel.onResume(
+            intent.data?.getQueryParameter("code")
+        )
     }
 
 
     private fun startPlaceHolderActivity(accessToken: String) {
-        intent = Intent(this@MainActivity, PlaceHolderActivity::class.java)
+        intent = Intent(this@AuthorizationActivity, PlaceHolderActivity::class.java)
         intent.putExtra("access_token", accessToken)
         startActivity(intent)
         finish()

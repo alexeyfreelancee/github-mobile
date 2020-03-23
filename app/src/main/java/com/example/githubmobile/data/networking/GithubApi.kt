@@ -1,10 +1,10 @@
-package com.example.githubmobile.networking
+package com.example.githubmobile.data.networking
 
-import com.example.githubmobile.models.AccessToken
-import com.example.githubmobile.models.ReposList
-import com.example.githubmobile.models.User
-import com.example.githubmobile.models.events.UserEvent
-import com.example.githubmobile.models.github_repository.GithubRepository
+import com.example.githubmobile.data.models.AccessToken
+import com.example.githubmobile.data.models.ReposList
+import com.example.githubmobile.data.models.User
+import com.example.githubmobile.data.models.events.UserEvent
+import com.example.githubmobile.data.models.github_repository.GithubRepo
 import retrofit2.http.*
 
 interface GithubApi {
@@ -26,7 +26,7 @@ interface GithubApi {
     suspend fun getReposForUser(
         @HeaderMap authHeader: Map<String, String>,
         @Path("user") user: String
-    ): ArrayList<GithubRepository>
+    ): ArrayList<GithubRepo>
 
 
     @GET("search/repositories")

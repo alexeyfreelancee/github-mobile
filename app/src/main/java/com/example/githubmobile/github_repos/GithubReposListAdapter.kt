@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.githubmobile.R
-import com.example.githubmobile.models.github_repository.GithubRepository
+import com.example.githubmobile.data.models.github_repository.GithubRepo
 import kotlinx.android.synthetic.main.github_repos_row.view.*
 
 class GithubReposListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var reposList: ArrayList<GithubRepository> = ArrayList()
+    private var reposList: ArrayList<GithubRepo> = ArrayList()
 
 
     class RepositoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(repository: GithubRepository) {
+        fun bind(repository: GithubRepo) {
             itemView.repo_description.text = repository.description
             Glide.with(itemView.context)
                 .load(repository.owner.avatar_url)
@@ -52,7 +52,7 @@ class GithubReposListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun createList(newList: ArrayList<GithubRepository>) {
+    fun createList(newList: ArrayList<GithubRepo>) {
         this.reposList = newList
         notifyDataSetChanged()
     }

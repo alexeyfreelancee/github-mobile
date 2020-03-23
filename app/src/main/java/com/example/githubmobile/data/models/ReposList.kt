@@ -1,10 +1,10 @@
-package com.example.githubmobile.models
+package com.example.githubmobile.data.models
 
-import com.example.githubmobile.models.github_repository.GithubRepository
+import com.example.githubmobile.data.models.github_repository.GithubRepo
 import com.google.gson.annotations.SerializedName
 
 data class ReposList(
     @SerializedName("total_count") val total_count : Int,
     @SerializedName("incomplete_results") val incomplete_results : Boolean,
-    @SerializedName("items") val items : ArrayList<GithubRepository>
+    @SerializedName("items") val items : ArrayList<GithubRepo>
 )

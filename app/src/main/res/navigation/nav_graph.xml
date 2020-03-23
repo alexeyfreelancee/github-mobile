@@ -9,7 +9,7 @@
         android:id="@+id/githubRepostFragment"
         android:name="com.example.githubmobile.github_repos.my_repos.GithubReposFragment"
         android:label="github_repost_fragment"
-        tools:layout="@layout/github_repost_fragment" />
+        tools:layout="@layout/github_repos_fragment" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.githubmobile.user_profile.ProfileFragment"

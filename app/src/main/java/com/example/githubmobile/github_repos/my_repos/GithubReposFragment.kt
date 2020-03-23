@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubmobile.R
 import com.example.githubmobile.github_repos.GithubReposListAdapter
-import kotlinx.android.synthetic.main.github_repost_fragment.*
+import kotlinx.android.synthetic.main.github_repos_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -21,27 +21,25 @@ class GithubReposFragment : Fragment(), KodeinAware {
     private lateinit var githubReposListAdapter: GithubReposListAdapter
     private lateinit var viewModel: GithubReposViewModel
 
-    companion object {
-        fun newInstance() =
-            GithubReposFragment()
-    }
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.github_repost_fragment, container, false)
+        return inflater.inflate(R.layout.github_repos_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-
         super.onActivityCreated(savedInstanceState)
-        initRecyclerView()
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(GithubReposViewModel::class.java)
+        initRecyclerView()
+        initObservers()
+
         viewModel.getReposList()
-        viewModel.reposList?.observe(this, Observer {
+    }
+
+
+    private fun initObservers(){
+        viewModel.reposList.observe(this, Observer {
             githubReposListAdapter.createList(it)
         })
     }
@@ -50,8 +48,7 @@ class GithubReposFragment : Fragment(), KodeinAware {
     private fun initRecyclerView(){
         rv_repos.apply {
             layoutManager = LinearLayoutManager(context)
-            githubReposListAdapter =
-                GithubReposListAdapter()
+            githubReposListAdapter = GithubReposListAdapter()
             adapter = githubReposListAdapter
         }
     }

@@ -11,12 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
-import com.example.githubmobile.authorization.MainActivity
+import com.example.githubmobile.authorization.AuthorizationActivity
 import com.example.githubmobile.github_repos.my_repos.GithubReposFragment
 import com.example.githubmobile.github_repos.search_repos.SearchActivity
 import com.example.githubmobile.user_profile.ProfileFragment
 import com.example.githubmobile.user_profile.UserViewModel
 import com.example.githubmobile.user_profile.UserViewModelFactory
+import com.example.githubmobile.utils.SharedPrefsProvider
+import com.example.githubmobile.utils.showToast
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_place_holder.*
 import kotlinx.android.synthetic.main.nav_header.view.*
@@ -123,7 +125,7 @@ class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.nav_logout -> {
                 prefs.removeAccessToken()
                 showToast("Logged out")
-                startActivity(Intent(this@PlaceHolderActivity, MainActivity::class.java))
+                startActivity(Intent(this@PlaceHolderActivity, AuthorizationActivity::class.java))
                 finish()
             }
             R.id.nav_search -> {

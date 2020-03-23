@@ -1,4 +1,4 @@
-package com.example.githubmobile.networking
+package com.example.githubmobile.data.networking
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
