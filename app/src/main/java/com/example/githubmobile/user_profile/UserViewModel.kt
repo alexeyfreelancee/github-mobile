@@ -44,7 +44,7 @@ class UserViewModel(private val repository: GitRepositoryInterface) : ViewModel(
 
 @Suppress("UNCHECKED_CAST")
 class UserViewModelFactory(
-    private val repository: GitRepository
+    private val repository: GitRepositoryInterface
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

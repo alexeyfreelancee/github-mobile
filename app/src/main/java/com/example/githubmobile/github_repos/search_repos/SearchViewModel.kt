@@ -2,7 +2,6 @@ package com.example.githubmobile.github_repos.search_repos
 
 import android.view.View
 import androidx.lifecycle.*
-import com.example.githubmobile.data.GitRepository
 import com.example.githubmobile.data.GitRepositoryInterface
 import com.example.githubmobile.data.models.github_repository.GithubRepo
 import kotlinx.coroutines.launch
@@ -11,18 +10,21 @@ class SearchActivityViewModel(private val repository: GitRepositoryInterface) : 
     private var _repos = MutableLiveData<ArrayList<GithubRepo>>()
     var repos: LiveData<ArrayList<GithubRepo>> = _repos
 
-    var name = MutableLiveData<String>()
+    var name: String = ""
 
-    private var _isUpdating = MutableLiveData<Boolean>(false)
-    var isUpdating: LiveData<Boolean> = _isUpdating
+    private var _dataLoading = MutableLiveData<Boolean>(false)
+    var dataLoading: LiveData<Boolean> = _dataLoading
 
     var reposEmpty: LiveData<Boolean> = repos.map { it.isNullOrEmpty() }
-
+    var listener: SearchListener? = null
     fun getReposByName(view: View?) = viewModelScope.launch {
-        name.value?.let { name ->
-            _isUpdating.value = true
-            _repos.value = repository.getReposByName(name)
-            _isUpdating.value = false
+        listener?.let { listener ->
+            if (name.isNotEmpty()) {
+                listener.searchStarted()
+                _repos.value = repository.getReposByName(name)
+                listener.searchCompleted()
+            }
+
         }
     }
 
@@ -30,11 +32,9 @@ class SearchActivityViewModel(private val repository: GitRepositoryInterface) : 
 }
 
 
-
-
 @Suppress("UNCHECKED_CAST")
 class SearchActivityViewModelFactory(
-    private val repository: GitRepository
+    private val repository: GitRepositoryInterface
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

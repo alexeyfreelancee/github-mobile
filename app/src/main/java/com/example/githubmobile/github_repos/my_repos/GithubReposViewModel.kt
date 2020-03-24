@@ -21,7 +21,7 @@ class GithubReposViewModel(var githubReposRepository: GitRepositoryInterface) : 
 }
 
 class GithubReposViewModelFactory(
-    private val repository: GitRepository
+    private val repository: GitRepositoryInterface
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

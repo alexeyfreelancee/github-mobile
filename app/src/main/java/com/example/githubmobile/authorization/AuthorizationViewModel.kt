@@ -36,7 +36,7 @@ class AuthorizationViewModel(private val repository: GitRepositoryInterface) : V
 
 @Suppress("UNCHECKED_CAST")
 class AuthorizationViewModelFactory(
-    private val repository: GitRepository
+    private val repository: GitRepositoryInterface
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

@@ -7,23 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.githubmobile.R
+import com.example.githubmobile.ServiceLocator
 import com.example.githubmobile.data.models.User
 import kotlinx.android.synthetic.main.profile_fragment.*
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
 
-class ProfileFragment : Fragment(), KodeinAware {
+class ProfileFragment : Fragment() {
     private val rv_adapter = UserEventsAdapter()
-    override val kodein by kodein()
-    private val factory: UserViewModelFactory by instance()
-
-    private lateinit var viewModel: UserViewModel
+    private val viewModel: UserViewModel by viewModels {
+        UserViewModelFactory(ServiceLocator.provideRepository(requireActivity().applicationContext))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +31,6 @@ class ProfileFragment : Fragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, factory).get(UserViewModel::class.java)
 
         initRecyclerView()
         initObservers()

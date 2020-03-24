@@ -3,12 +3,14 @@ package com.example.githubmobile.authorization
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubmobile.R
 import com.example.githubmobile.utils.showToast
 import com.example.githubmobile.PlaceHolderActivity
+import com.example.githubmobile.ServiceLocator
 import com.example.githubmobile.utils.SharedPrefsProvider
 import com.example.githubmobile.utils.log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,23 +18,20 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class AuthorizationActivity : AppCompatActivity(), KodeinAware {
+class AuthorizationActivity : AppCompatActivity() {
     private val clientId = "3b97901fbec977e5e3f7"
     private val redirectUri = "github://callback"
 
-    private lateinit var viewModel: AuthorizationViewModel
+    private val viewModel: AuthorizationViewModel by viewModels<AuthorizationViewModel>{
+        AuthorizationViewModelFactory(ServiceLocator.provideRepository(applicationContext))
+    }
 
-    override val kodein by kodein()
-    private val factory: AuthorizationViewModelFactory by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProvider(this, factory).get(AuthorizationViewModel::class.java)
-
         initObservers()
         viewModel.getAccessToken()
-
 
         b_authorize.setOnClickListener {
             authorize()

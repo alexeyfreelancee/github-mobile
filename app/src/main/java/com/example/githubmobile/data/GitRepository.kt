@@ -45,6 +45,7 @@ class GitRepository(
 
 
     override suspend fun getReposByName(name: String): ArrayList<GithubRepo> {
+
         return dataSource.getReposByName(header, name).items
     }
 
@@ -59,8 +60,12 @@ class GitRepository(
         return accessToken
     }
 
+    override suspend fun getEmptyRepos(): ArrayList<GithubRepo> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
-    override fun loadAccessTokenFromPrefs(): String? {
+
+    override suspend fun loadAccessTokenFromPrefs(): String? {
         sharedPrefsProvider.loadAccessToken()?.let {
             return it
         }

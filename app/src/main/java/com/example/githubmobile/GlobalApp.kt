@@ -7,6 +7,7 @@ import com.example.githubmobile.github_repos.search_repos.SearchActivityViewMode
 import com.example.githubmobile.data.networking.NetworkConnectionInterceptor
 import com.example.githubmobile.data.networking.RetrofitClient
 import com.example.githubmobile.data.GitRepository
+import com.example.githubmobile.data.source.RemoteDataSource
 import com.example.githubmobile.user_profile.UserViewModelFactory
 import com.example.githubmobile.utils.SharedPrefsProvider
 import org.kodein.di.Kodein
@@ -32,6 +33,9 @@ class GlobalApp : Application(), KodeinAware{
             SharedPrefsProvider(
                 instance()
             )
+        }
+        bind() from singleton {
+            RemoteDataSource(instance())
         }
         bind() from singleton {
             GitRepository(

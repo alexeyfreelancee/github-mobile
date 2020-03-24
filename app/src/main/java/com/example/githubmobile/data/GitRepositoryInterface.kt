@@ -16,5 +16,8 @@ interface GitRepositoryInterface {
     suspend fun getReposByName(name: String): ArrayList<GithubRepo>
 
     suspend fun getAccessByCode(code: String): AccessToken
-    fun loadAccessTokenFromPrefs(): String?
+
+    suspend fun loadAccessTokenFromPrefs(): String?
+
+    suspend fun getEmptyRepos(): ArrayList<GithubRepo>
 }

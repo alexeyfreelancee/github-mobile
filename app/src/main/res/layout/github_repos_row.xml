@@ -26,6 +26,8 @@
             android:src="@drawable/ic_launcher_background" />
 
         <TextView
+            android:layout_toStartOf="@id/repo_lang"
+            android:layout_marginStart="4dp"
             android:layout_alignParentTop="true"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"

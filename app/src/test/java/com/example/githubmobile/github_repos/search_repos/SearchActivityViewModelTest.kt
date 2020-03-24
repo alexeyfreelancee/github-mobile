@@ -37,10 +37,20 @@ class SearchActivityViewModelTest{
 
     @Test
     fun getReposByName_repos_notNull(){
-        viewModel.name = MutableLiveData("name")
+        viewModel.name = "name"
         viewModel.getReposByName(null)
         val repos = viewModel.repos.getOrAwaitValue()
         assertTrue(repos.size > 0)
 
     }
+
+
+    @Test
+    fun getReposByName_null_NotCrash(){
+        viewModel.name = null
+        viewModel.getReposByName(null)
+    }
+
+
+
 }

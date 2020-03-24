@@ -30,6 +30,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:textCursorDrawable="@null"
                     android:text="@={viewmodel.name}"
                     android:id="@+id/et_reponame"
                     android:layout_width="match_parent"
@@ -43,7 +44,7 @@
                     android:singleLine="true"
                     android:hint="@string/search"
                     android:textColor="#fff"
-                    android:textColorHint="@android:color/secondary_text_dark" />
+                    android:textColorHint="#fff" />
 
 
                 <ImageButton
@@ -62,7 +63,7 @@
 
         <ProgressBar
             android:id="@+id/search_progress_bar"
-            android:visibility="@{viewmodel.isUpdating ? View.VISIBLE : View.GONE}"
+            android:visibility="gone"
             android:layout_width="45dp"
             android:layout_height="45dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -81,7 +82,7 @@
             tools:layout_editor_absoluteX="0dp" />
 
         <TextView
-            android:visibility="@{viewmodel.reposEmpty ? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewmodel.reposEmpty ? View.VISIBLE : View.GONE}"
             android:id="@+id/tv_empty_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
