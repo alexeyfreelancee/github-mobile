@@ -1,7 +1,6 @@
 package com.example.githubmobile.user_profile
 
 import androidx.lifecycle.*
-import com.example.githubmobile.data.GitRepository
 import com.example.githubmobile.data.GitRepositoryInterface
 import com.example.githubmobile.data.models.User
 import com.example.githubmobile.data.models.events.UserEvent
@@ -9,7 +8,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class UserViewModel(private val repository: GitRepositoryInterface) : ViewModel() {
+class ProfileViewModel(private val repository: GitRepositoryInterface) : ViewModel() {
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> = _user
 
@@ -18,19 +17,20 @@ class UserViewModel(private val repository: GitRepositoryInterface) : ViewModel(
 
 
     init {
-        updateUserEvents()
         updateUserInfo()
+        updateUserEvents()
+
     }
+
     fun updateUserInfo() = viewModelScope.launch {
         val userData = repository.getUserInfo()
         userData.apply {
             created_at = "Joined at ${getDate(created_at)}"
         }
         _user.value = userData
-
     }
 
-    fun updateUserEvents() = viewModelScope.launch {
+    private fun updateUserEvents() = viewModelScope.launch {
         _events.value = repository.getUserEvents()
         _events.value?.forEach { event -> event.created_at = getDate(event.created_at) }
     }
@@ -53,7 +53,7 @@ class UserViewModelFactory(
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return UserViewModel(repository) as T
+        return ProfileViewModel(repository) as T
     }
 
 }

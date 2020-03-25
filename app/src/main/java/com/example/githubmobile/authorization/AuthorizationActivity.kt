@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.githubmobile.PlaceHolderActivity
 import com.example.githubmobile.R
 import com.example.githubmobile.utils.showToast
-import com.example.githubmobile.PlaceHolderActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -36,8 +36,8 @@ class AuthorizationActivity : AppCompatActivity(), KodeinAware {
         }
     }
 
-    private fun initObservers(){
-        viewModel.accessToken.observe(this, Observer {token ->
+    private fun initObservers() {
+        viewModel.accessToken.observe(this, Observer { token ->
             if (token.success) {
                 startPlaceHolderActivity(token.accessToken)
             } else {

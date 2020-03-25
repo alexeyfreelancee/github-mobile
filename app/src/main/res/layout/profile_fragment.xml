@@ -6,7 +6,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewmodel"
-            type="com.example.githubmobile.user_profile.UserViewModel" />
+            type="com.example.githubmobile.user_profile.ProfileViewModel" />
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

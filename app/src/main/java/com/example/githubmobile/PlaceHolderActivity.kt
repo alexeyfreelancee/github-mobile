@@ -15,10 +15,9 @@ import com.example.githubmobile.authorization.AuthorizationActivity
 import com.example.githubmobile.github_repos.my_repos.GithubReposFragment
 import com.example.githubmobile.github_repos.search_repos.SearchActivity
 import com.example.githubmobile.user_profile.ProfileFragment
-import com.example.githubmobile.user_profile.UserViewModel
+import com.example.githubmobile.user_profile.ProfileViewModel
 import com.example.githubmobile.user_profile.UserViewModelFactory
 import com.example.githubmobile.utils.SharedPrefsProvider
-import com.example.githubmobile.utils.showToast
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_place_holder.*
 import kotlinx.android.synthetic.main.nav_header.view.*
@@ -29,7 +28,7 @@ import org.kodein.di.generic.instance
 class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, KodeinAware {
     override val kodein by kodein()
     private val factory: UserViewModelFactory by instance()
-    private lateinit var userViewModel: UserViewModel
+    private lateinit var profileViewModel: ProfileViewModel
     private val prefs: SharedPrefsProvider by instance()
     private var selectedItem = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,9 +49,9 @@ class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             nav_view.setCheckedItem(R.id.nav_user)
         }
 
-        userViewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
-        userViewModel.updateUserInfo()
-        userViewModel.user.observe(this, Observer {
+        profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
+        profileViewModel.updateUserInfo()
+        profileViewModel.user.observe(this, Observer {
             with(nav_view.getHeaderView(0)) {
                 header_register_date.text = it.created_at
                 header_username.text = it.login

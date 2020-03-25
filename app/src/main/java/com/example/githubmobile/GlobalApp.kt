@@ -34,9 +34,7 @@ class GlobalApp : Application(), KodeinAware{
                 instance()
             )
         }
-        bind() from singleton {
-            RemoteDataSource(instance())
-        }
+        bind() from singleton { RemoteDataSource(instance()) }
         bind() from singleton {
             GitRepository(
                 instance(),

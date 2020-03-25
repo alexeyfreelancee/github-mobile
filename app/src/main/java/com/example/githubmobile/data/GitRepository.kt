@@ -65,7 +65,7 @@ class GitRepository(
     }
 
 
-    override suspend fun loadAccessTokenFromPrefs(): String? {
+    override  fun loadAccessTokenFromPrefs(): String? {
         sharedPrefsProvider.loadAccessToken()?.let {
             return it
         }

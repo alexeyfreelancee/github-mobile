@@ -23,14 +23,14 @@ class ProfileFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
     private val factory: UserViewModelFactory by instance()
 
-    private lateinit var viewModel: UserViewModel
+    private lateinit var viewModel: ProfileViewModel
     private lateinit var binding: ProfileFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
         binding = ProfileFragmentBinding.inflate(inflater, container, false).apply {
             viewmodel = viewModel
             lifecycleOwner = this@ProfileFragment.viewLifecycleOwner
@@ -47,11 +47,11 @@ class ProfileFragment : Fragment(), KodeinAware {
 
 
     private fun initObservers() {
-        viewModel.user.observe(this, Observer { user ->
+        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
             initUi(user)
         })
 
-        viewModel.events.observe(this, Observer {
+        viewModel.events.observe(viewLifecycleOwner, Observer {
             rv_adapter.createList(it)
         })
     }
