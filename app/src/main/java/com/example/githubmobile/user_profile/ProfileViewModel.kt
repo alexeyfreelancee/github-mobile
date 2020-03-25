@@ -16,6 +16,11 @@ class UserViewModel(private val repository: GitRepositoryInterface) : ViewModel(
     private val _events = MutableLiveData<ArrayList<UserEvent>>()
     var events: LiveData<ArrayList<UserEvent>> = _events
 
+
+    init {
+        updateUserEvents()
+        updateUserInfo()
+    }
     fun updateUserInfo() = viewModelScope.launch {
         val userData = repository.getUserInfo()
         userData.apply {

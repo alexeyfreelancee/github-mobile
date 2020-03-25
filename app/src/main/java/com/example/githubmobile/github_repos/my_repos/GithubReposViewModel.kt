@@ -13,6 +13,9 @@ class GithubReposViewModel(var githubReposRepository: GitRepositoryInterface) : 
     private var _reposList = MutableLiveData<ArrayList<GithubRepo>>()
     var reposList = _reposList
 
+    init {
+        getReposList()
+    }
 
     fun getReposList() = viewModelScope.launch {
         _reposList.value = githubReposRepository.getReposForUser()

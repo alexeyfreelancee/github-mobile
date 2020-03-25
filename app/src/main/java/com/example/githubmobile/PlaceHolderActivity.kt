@@ -124,7 +124,6 @@ class PlaceHolderActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             }
             R.id.nav_logout -> {
                 prefs.removeAccessToken()
-                showToast("Logged out")
                 startActivity(Intent(this@PlaceHolderActivity, AuthorizationActivity::class.java))
                 finish()
             }

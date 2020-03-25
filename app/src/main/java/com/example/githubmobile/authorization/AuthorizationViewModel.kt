@@ -32,6 +32,7 @@ class AuthorizationViewModel(private val repository: GitRepositoryInterface) : V
         getAccessTokenByCode(code)
     }
 
+
 }
 
 @Suppress("UNCHECKED_CAST")

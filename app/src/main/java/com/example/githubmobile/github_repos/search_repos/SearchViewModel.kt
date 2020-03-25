@@ -4,6 +4,7 @@ import android.view.View
 import androidx.lifecycle.*
 import com.example.githubmobile.data.GitRepositoryInterface
 import com.example.githubmobile.data.models.github_repository.GithubRepo
+import com.example.githubmobile.utils.log
 import kotlinx.coroutines.launch
 
 class SearchActivityViewModel(private val repository: GitRepositoryInterface) : ViewModel() {
@@ -15,17 +16,16 @@ class SearchActivityViewModel(private val repository: GitRepositoryInterface) : 
     private var _dataLoading = MutableLiveData<Boolean>(false)
     var dataLoading: LiveData<Boolean> = _dataLoading
 
-    var reposEmpty: LiveData<Boolean> = repos.map { it.isNullOrEmpty() }
-    var listener: SearchListener? = null
-    fun getReposByName(view: View?) = viewModelScope.launch {
-        listener?.let { listener ->
-            if (name.isNotEmpty()) {
-                listener.searchStarted()
-                _repos.value = repository.getReposByName(name)
-                listener.searchCompleted()
-            }
 
+    fun getReposByName(view: View?) = viewModelScope.launch {
+        log(_repos.value?.size.toString())
+
+        if (name.isNotEmpty()) {
+            _dataLoading.value = true
+            _repos.value = repository.getReposByName(name)
+            _dataLoading.value = false
         }
+
     }
 
 

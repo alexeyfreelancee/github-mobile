@@ -86,6 +86,11 @@ dependencies {
     implementation "org.kodein.di:kodein-di-generic-jvm:6.2.1"
     implementation "org.kodein.di:kodein-di-framework-android-x:6.2.1"
 
+
+    //CardView
+    implementation "androidx.cardview:cardview:1.0.0"
+
+
     //Android Navigation Architecture
     implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-alpha02"
     implementation "androidx.navigation:navigation-ui-ktx:2.2.0-alpha02"
@@ -95,8 +100,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.0"
 
 
-    //CardView
-    implementation "androidx.cardview:cardview:1.0.0"
+
 
 
 }
