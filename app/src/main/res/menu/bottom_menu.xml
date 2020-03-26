@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/ic_feeds"
+        android:id="@+id/feeds"
+        android:title="@string/feeds"/>
+
+    <item
+        android:icon="@drawable/ic_issues"
+        android:title="@string/issues"
+        android:id="@+id/issues"/>
+
+    <item
+        android:icon="@drawable/ic_pull_requests"
+        android:id="@+id/pull_requests"
+        android:title="@string/pull_requests"/>
+
+</menu>

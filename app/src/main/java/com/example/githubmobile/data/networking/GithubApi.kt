@@ -4,7 +4,10 @@ import com.example.githubmobile.data.models.AccessToken
 import com.example.githubmobile.data.models.ReposList
 import com.example.githubmobile.data.models.User
 import com.example.githubmobile.data.models.events.UserEvent
+import com.example.githubmobile.data.models.feed.Feed
 import com.example.githubmobile.data.models.github_repository.GithubRepo
+import com.example.githubmobile.data.models.issue.Issue
+import com.example.githubmobile.data.models.pull_request.PullRequest
 import retrofit2.http.*
 
 interface GithubApi {
@@ -41,5 +44,24 @@ interface GithubApi {
         @HeaderMap authHeader:  Map<String, String>,
         @Path("user") user: String): ArrayList<UserEvent>
 
+    @GET("repos/{user}/{repo}/pulls")
+    suspend fun getPullRequests(
+        @HeaderMap authHeader:  Map<String, String>,
+        @Path("user") user: String,
+        @Path("repo") repoName: String) : ArrayList<PullRequest>
 
+    @GET("repos/{user}/{repo}/issues")
+    suspend fun getIssues(
+        @HeaderMap authHeader:  Map<String, String>,
+        @Path("user") user: String,
+        @Path("repo") repoName: String
+    ) : ArrayList<Issue>
+
+
+    @GET("{username}.private.actor.atom")
+    suspend fun getFeeds(
+        @HeaderMap authHeader:  Map<String, String>,
+        @Path("username") username: String,
+        @Query("token") accessToken: String
+    ) : Feed
 }

@@ -2,56 +2,52 @@ package com.example.githubmobile.user_profile
 
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.os.PersistableBundle
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.githubmobile.R
 import com.example.githubmobile.data.models.User
-import com.example.githubmobile.databinding.ProfileFragmentBinding
-import kotlinx.android.synthetic.main.profile_fragment.*
+import com.example.githubmobile.databinding.ActivityProfileBinding
+import com.example.githubmobile.utils.log
+import kotlinx.android.synthetic.main.activity_profile.*
 import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
+import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class ProfileFragment : Fragment(), KodeinAware {
+class ProfileActivity : AppCompatActivity(), KodeinAware {
+
     private val rv_adapter = UserEventsAdapter()
     override val kodein by kodein()
     private val factory: UserViewModelFactory by instance()
 
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var binding: ProfileFragmentBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Profile"
+
         viewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
-        binding = ProfileFragmentBinding.inflate(inflater, container, false).apply {
+        DataBindingUtil.setContentView<ActivityProfileBinding>(this, R.layout.activity_profile).apply {
             viewmodel = viewModel
-            lifecycleOwner = this@ProfileFragment.viewLifecycleOwner
+            lifecycleOwner = this@ProfileActivity
         }
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.lifecycleOwner = this.viewLifecycleOwner
         initRecyclerView()
         initObservers()
     }
 
-
     private fun initObservers() {
-        viewModel.user.observe(viewLifecycleOwner, Observer { user ->
+        viewModel.user.observe(this, Observer { user ->
             initUi(user)
         })
 
-        viewModel.events.observe(viewLifecycleOwner, Observer {
+        viewModel.events.observe(this, Observer {
             rv_adapter.createList(it)
         })
     }
@@ -70,7 +66,7 @@ class ProfileFragment : Fragment(), KodeinAware {
 
 
     private fun initUi(user: User) {
-        Glide.with(requireActivity().applicationContext)
+        Glide.with(applicationContext)
             .load(user.avatar_url)
             .into(user_image)
         user_username.text = user.login
@@ -87,5 +83,6 @@ class ProfileFragment : Fragment(), KodeinAware {
 
 
     }
-}
 
+
+}

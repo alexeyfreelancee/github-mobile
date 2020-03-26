@@ -1,6 +1,8 @@
 package com.example.githubmobile.authorization
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,7 @@ class AuthorizationActivity : AppCompatActivity(), KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        verifyAvailableNetwork(this)
         viewModel = ViewModelProvider(this, factory).get(AuthorizationViewModel::class.java)
         initObservers()
 
@@ -70,4 +73,13 @@ class AuthorizationActivity : AppCompatActivity(), KodeinAware {
     }
 
 
+    private fun verifyAvailableNetwork(activity:AppCompatActivity){
+        val connectivityManager=activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo=connectivityManager.activeNetworkInfo
+        val available = networkInfo!=null && networkInfo.isConnected
+        if(!available){
+            showToast("No internet connection :(" )
+            finish()
+        }
+    }
 }

@@ -12,7 +12,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions{
+    kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     dataBinding {
@@ -70,6 +70,8 @@ dependencies {
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
+    implementation "com.squareup.retrofit2:converter-simplexml:2.7.1"
 
     //glide
     def glide_version = "4.8.0"
@@ -90,7 +92,8 @@ dependencies {
     //CardView
     implementation "androidx.cardview:cardview:1.0.0"
 
-
+    //CircleImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     //Android Navigation Architecture
     implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-alpha02"
     implementation "androidx.navigation:navigation-ui-ktx:2.2.0-alpha02"
@@ -98,9 +101,6 @@ dependencies {
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.3.0'
     implementation 'com.xwray:groupie-databinding:2.3.0'
     implementation "androidx.preference:preference-ktx:1.1.0"
-
-
-
 
 
 }

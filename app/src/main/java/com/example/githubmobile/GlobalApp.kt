@@ -8,6 +8,11 @@ import com.example.githubmobile.data.networking.NetworkConnectionInterceptor
 import com.example.githubmobile.data.networking.RetrofitClient
 import com.example.githubmobile.data.GitRepository
 import com.example.githubmobile.data.source.RemoteDataSource
+import com.example.githubmobile.home.feeds.FeedsViewModel
+import com.example.githubmobile.home.feeds.FeedsViewModelFactory
+import com.example.githubmobile.home.issues.IssuesViewModel
+import com.example.githubmobile.home.issues.IssuesViewModelFactory
+import com.example.githubmobile.home.pull_requests.PullRequestsViewModelFactory
 import com.example.githubmobile.user_profile.UserViewModelFactory
 import com.example.githubmobile.utils.SharedPrefsProvider
 import org.kodein.di.Kodein
@@ -42,6 +47,9 @@ class GlobalApp : Application(), KodeinAware{
             )
         }
 
+        bind() from singleton { PullRequestsViewModelFactory(instance()) }
+        bind() from singleton { IssuesViewModelFactory(instance()) }
+        bind() from singleton { FeedsViewModelFactory(instance()) }
         bind() from singleton { AuthorizationViewModelFactory(instance()) }
         bind() from singleton { UserViewModelFactory(instance())}
         bind() from singleton { GithubReposViewModelFactory(instance())}

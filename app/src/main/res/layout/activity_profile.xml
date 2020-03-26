@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewmodel"
             type="com.example.githubmobile.user_profile.ProfileViewModel" />
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ScrollView
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            tools:context=".user_profile.ProfileFragment">
+            tools:context=".user_profile.ProfileActivityTest">
 
             <androidx.cardview.widget.CardView
 
@@ -145,14 +146,14 @@
                     android:layout_height="match_parent" />
 
                 <TextView
-                    android:visibility="@{viewmodel.events.empty || viewmodel.events == null ? View.GONE : View.VISIBLE}"
                     android:id="@+id/user_empty_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:text="@string/no_activity_yet"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:visibility="@{viewmodel.events.empty || viewmodel.events == null ? View.GONE : View.VISIBLE}" />
 
 
             </RelativeLayout>

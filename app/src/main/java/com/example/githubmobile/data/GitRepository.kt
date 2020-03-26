@@ -1,26 +1,28 @@
 package com.example.githubmobile.data
 
-import com.example.githubmobile.utils.SharedPrefsProvider
 import com.example.githubmobile.data.models.AccessToken
 import com.example.githubmobile.data.models.User
 import com.example.githubmobile.data.models.events.UserEvent
+import com.example.githubmobile.data.models.feed.Feed
 import com.example.githubmobile.data.models.github_repository.GithubRepo
+import com.example.githubmobile.data.models.issue.Issue
+import com.example.githubmobile.data.models.pull_request.PullRequest
 import com.example.githubmobile.data.source.RemoteDataSource
-import java.util.*
+import com.example.githubmobile.utils.SharedPrefsProvider
+import com.example.githubmobile.utils.log
 
 class GitRepository(
     private val dataSource: RemoteDataSource,
     private val sharedPrefsProvider: SharedPrefsProvider
 ) : GitRepositoryInterface {
-    private val accessToken =
-        mapOf("Authorization" to "token ${sharedPrefsProvider.loadAccessToken()}")
-    private val header = mapOf("Authorization" to "token ${sharedPrefsProvider.loadAccessToken()}")
+    private val accessToken = sharedPrefsProvider.loadAccessToken()
+    private val header = mapOf("Authorization" to "token $accessToken")
     private val clientId = "3b97901fbec977e5e3f7"
     private val clientSecret = "369cea6f3430594207d0527739ff426356907442"
-
+    private var username: String? = null
 
     override suspend fun getUserInfo(): User {
-        val user = dataSource.getUserByToken(accessToken)
+        val user = dataSource.getUserByToken(header)
         sharedPrefsProvider.saveUsername(user.login)
         return user
     }
@@ -29,18 +31,15 @@ class GitRepository(
     override suspend fun getUserEvents(): ArrayList<UserEvent> {
         val username = getUserInfo().login
         return dataSource.getUserEvents(
-            accessToken,
+            header,
             username
         )
     }
 
 
     override suspend fun getReposForUser(): ArrayList<GithubRepo> {
-        val username = sharedPrefsProvider.loadUsername()
-        username?.let {
-            return dataSource.getReposForUser(header, it)
-        }
-        return ArrayList()
+        val username = username ?: provideUserName()
+        return dataSource.getReposForUser(header, username)
     }
 
 
@@ -60,18 +59,51 @@ class GitRepository(
         return accessToken
     }
 
-    override suspend fun getEmptyRepos(): ArrayList<GithubRepo> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override suspend fun getFeeds(): Feed {
+        val username = username ?: provideUserName()
+        return dataSource.getFeeds(header, accessToken!!, username)
     }
 
 
-    override  fun loadAccessTokenFromPrefs(): String? {
+    override suspend fun getIssues(): ArrayList<Issue> {
+        val username = username ?: provideUserName()
+        val reposList = dataSource.getReposForUser(
+            header, username
+        )
+        val issueList = ArrayList<Issue>()
+        reposList.forEach {
+            val issues = dataSource.getIssues(header, username, it.name)
+
+            if (issues.size > 0) issueList.addAll(issues)
+        }
+        return issueList
+    }
+
+    override suspend fun getPullRequests(): ArrayList<PullRequest> {
+        val username = username ?: provideUserName()
+        val reposList = dataSource.getReposForUser(
+            header, username
+        )
+        val pullRequestList = ArrayList<PullRequest>()
+        reposList.forEach {
+            val pullRequests = dataSource.getPullRequests(header, username, it.name)
+            if(pullRequests.size > 0) pullRequestList.addAll(pullRequests)
+        }
+        return pullRequestList
+    }
+
+    override fun loadAccessTokenFromPrefs(): String? {
         sharedPrefsProvider.loadAccessToken()?.let {
             return it
         }
         return null
     }
 
-
+    private suspend fun provideUserName(): String {
+        val result = getUserInfo().login
+        this.username = result
+        return result
+    }
 
 }

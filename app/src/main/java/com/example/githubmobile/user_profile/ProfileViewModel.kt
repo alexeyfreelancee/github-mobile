@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.example.githubmobile.data.GitRepositoryInterface
 import com.example.githubmobile.data.models.User
 import com.example.githubmobile.data.models.events.UserEvent
+import com.example.githubmobile.utils.getDate
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,28 +23,20 @@ class ProfileViewModel(private val repository: GitRepositoryInterface) : ViewMod
 
     }
 
-    fun updateUserInfo() = viewModelScope.launch {
+    private fun updateUserInfo() = viewModelScope.launch {
         val userData = repository.getUserInfo()
         userData.apply {
-            created_at = "Joined at ${getDate(created_at)}"
+            created_at = "Joined at ${created_at.getDate()}"
         }
         _user.value = userData
     }
 
     private fun updateUserEvents() = viewModelScope.launch {
         _events.value = repository.getUserEvents()
-        _events.value?.forEach { event -> event.created_at = getDate(event.created_at) }
+        _events.value?.forEach { event -> event.created_at = event.created_at.getDate() }
     }
 
-    private fun getDate(string: String): String {
-        val dateString = string.replace("[TZ]".toRegex(), " ")
-        val date = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse(dateString)
-        val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        date?.let {
-            return simpleDateFormat.format(date)
-        }
-        return "no date"
-    }
+
 
 }
 
