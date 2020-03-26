@@ -27,9 +27,7 @@ class IssuesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolder -> {
-                holder.bind(items[position])
-            }
+            is ViewHolder -> holder.bind(items[position])
         }
     }
 

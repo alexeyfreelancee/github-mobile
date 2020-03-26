@@ -74,8 +74,9 @@ class GitRepository(
         val issueList = ArrayList<Issue>()
         reposList.forEach {
             val issues = dataSource.getIssues(header, username, it.name)
-
-            if (issues.size > 0) issueList.addAll(issues)
+            issues.forEach {issue ->
+                if(issue.pullRequest?.url == null) issueList.add(issue)
+            }
         }
         return issueList
     }
