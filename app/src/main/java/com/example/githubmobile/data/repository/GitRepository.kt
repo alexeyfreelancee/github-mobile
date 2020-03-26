@@ -21,6 +21,7 @@ class GitRepository(
     private var header = mapOf("Authorization" to "Basic ${sharedPrefsProvider.loadAccessKey()}")
     private var username: String? = null
 
+
     suspend fun authorize(username: String, pass: String): Boolean {
         val base = "$username:$pass"
         val accessKey = Base64.encodeToString(base.toByteArray(), Base64.NO_WRAP)

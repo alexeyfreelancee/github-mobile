@@ -6,13 +6,13 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.example.githubmobile.authorization.AuthorizationActivity
-import com.example.githubmobile.data.networking.RetrofitClient
 import com.example.githubmobile.github_repos.my_repos.GithubReposActivity
 import com.example.githubmobile.github_repos.search_repos.SearchActivity
 import com.example.githubmobile.home.feeds.FeedsFragment
@@ -41,6 +41,11 @@ class PlaceHolderActivity : AppCompatActivity(),
     private lateinit var profileViewModel: ProfileViewModel
     private val sharedPrefsProvider: SharedPrefsProvider by instance()
 
+    private val issuesFragment = IssuesFragment()
+    private val feedsFragment = FeedsFragment()
+    private val pullRequestsFragment = PullRequestsFragment()
+    private var activeFragment: Fragment = feedsFragment
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,15 +58,19 @@ class PlaceHolderActivity : AppCompatActivity(),
 
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(
-                    R.id.fragment_container,
-                    FeedsFragment()
-                )
-                .commit()
+            initFragments()
             navigation.visible()
         }
+    }
+
+    private fun initFragments() {
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, feedsFragment, "1").commit()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, pullRequestsFragment, "2").hide(pullRequestsFragment)
+            .commit()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, issuesFragment, "3").hide(issuesFragment)
+            .commit()
     }
 
     private fun initViewModel() {
@@ -81,34 +90,20 @@ class PlaceHolderActivity : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.issues -> {
-
                 supportFragmentManager
-                    .beginTransaction()
-                    .replace(
-                        R.id.fragment_container,
-                        IssuesFragment()
-                    )
-                    .commit()
+                    .beginTransaction().hide(activeFragment).show(issuesFragment).commit()
+                activeFragment = issuesFragment
             }
-
             R.id.pull_requests -> {
                 supportFragmentManager
-                    .beginTransaction()
-                    .replace(
-                        R.id.fragment_container,
-                        PullRequestsFragment()
-                    )
-                    .commit()
+                    .beginTransaction().hide(activeFragment).show(pullRequestsFragment).commit()
+                activeFragment = pullRequestsFragment
             }
 
             R.id.feeds -> {
                 supportFragmentManager
-                    .beginTransaction()
-                    .replace(
-                        R.id.fragment_container,
-                        FeedsFragment()
-                    )
-                    .commit()
+                    .beginTransaction().hide(activeFragment).show(feedsFragment).commit()
+                activeFragment = feedsFragment
             }
             R.id.nav_home -> {
                 startActivity(Intent(applicationContext, PlaceHolderActivity::class.java))
