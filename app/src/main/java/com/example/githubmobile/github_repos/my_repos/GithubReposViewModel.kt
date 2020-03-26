@@ -4,12 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.githubmobile.data.GitRepository
-import com.example.githubmobile.data.GitRepositoryInterface
 import com.example.githubmobile.data.models.github_repository.GithubRepo
+import com.example.githubmobile.data.repository.GitRepository
 import kotlinx.coroutines.launch
 
-class GithubReposViewModel(var githubReposRepository: GitRepositoryInterface) : ViewModel() {
+class GithubReposViewModel(var githubReposRepository: GitRepository) : ViewModel() {
     private var _reposList = MutableLiveData<ArrayList<GithubRepo>>()
     var reposList = _reposList
 
@@ -24,7 +23,7 @@ class GithubReposViewModel(var githubReposRepository: GitRepositoryInterface) : 
 }
 
 class GithubReposViewModelFactory(
-    private val repository: GitRepositoryInterface
+    private val repository: GitRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

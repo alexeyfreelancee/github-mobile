@@ -6,11 +6,8 @@ import com.example.githubmobile.github_repos.my_repos.GithubReposViewModelFactor
 import com.example.githubmobile.github_repos.search_repos.SearchActivityViewModelFactory
 import com.example.githubmobile.data.networking.NetworkConnectionInterceptor
 import com.example.githubmobile.data.networking.RetrofitClient
-import com.example.githubmobile.data.GitRepository
-import com.example.githubmobile.data.source.RemoteDataSource
-import com.example.githubmobile.home.feeds.FeedsViewModel
+import com.example.githubmobile.data.repository.GitRepository
 import com.example.githubmobile.home.feeds.FeedsViewModelFactory
-import com.example.githubmobile.home.issues.IssuesViewModel
 import com.example.githubmobile.home.issues.IssuesViewModelFactory
 import com.example.githubmobile.home.pull_requests.PullRequestsViewModelFactory
 import com.example.githubmobile.user_profile.UserViewModelFactory
@@ -39,7 +36,7 @@ class GlobalApp : Application(), KodeinAware{
                 instance()
             )
         }
-        bind() from singleton { RemoteDataSource(instance()) }
+
         bind() from singleton {
             GitRepository(
                 instance(),

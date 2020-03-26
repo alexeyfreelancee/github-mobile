@@ -1,15 +1,14 @@
 package com.example.githubmobile.user_profile
 
 import androidx.lifecycle.*
-import com.example.githubmobile.data.GitRepositoryInterface
-import com.example.githubmobile.data.models.User
+import com.example.githubmobile.data.models.user.User
 import com.example.githubmobile.data.models.events.UserEvent
-import com.example.githubmobile.utils.getDate
+import com.example.githubmobile.data.repository.GitRepository
+import com.example.githubmobile.utils.parseDate
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 
-class ProfileViewModel(private val repository: GitRepositoryInterface) : ViewModel() {
+class ProfileViewModel(private val repository: GitRepository) : ViewModel() {
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> = _user
 
@@ -26,14 +25,14 @@ class ProfileViewModel(private val repository: GitRepositoryInterface) : ViewMod
     private fun updateUserInfo() = viewModelScope.launch {
         val userData = repository.getUserInfo()
         userData.apply {
-            created_at = "Joined at ${created_at.getDate()}"
+            created_at = "Joined at ${created_at.parseDate()}"
         }
         _user.value = userData
     }
 
     private fun updateUserEvents() = viewModelScope.launch {
         _events.value = repository.getUserEvents()
-        _events.value?.forEach { event -> event.created_at = event.created_at.getDate() }
+        _events.value?.forEach { event -> event.created_at = event.created_at.parseDate() }
     }
 
 
@@ -42,7 +41,7 @@ class ProfileViewModel(private val repository: GitRepositoryInterface) : ViewMod
 
 @Suppress("UNCHECKED_CAST")
 class UserViewModelFactory(
-    private val repository: GitRepositoryInterface
+    private val repository: GitRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

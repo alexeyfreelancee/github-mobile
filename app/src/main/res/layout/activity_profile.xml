@@ -53,6 +53,8 @@
 
                     <TextView
                         android:id="@+id/user_username"
+                        android:text="@{viewmodel.user.login}"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@id/user_image"
@@ -60,6 +62,7 @@
 
                     <TextView
                         android:id="@+id/user_country"
+                        android:text="@{viewmodel.user.location}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/user_username"
@@ -68,6 +71,7 @@
 
                     <TextView
                         android:id="@+id/user_joined_at"
+                        android:text="@{viewmodel.user.created_at}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/user_country"
@@ -77,14 +81,16 @@
 
                     <TextView
                         android:id="@+id/followers"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/user_joined_at"
                         android:layout_marginEnd="16dp"
                         android:layout_toEndOf="@id/user_followers"
-                        android:text="Followers" />
+                        android:text="@string/followers" />
 
                     <TextView
+                        android:text="@{String.valueOf(viewmodel.user.followers)}"
                         android:id="@+id/user_followers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -99,16 +105,16 @@
                         android:layout_below="@id/user_joined_at"
                         android:layout_marginEnd="16dp"
                         android:layout_toEndOf="@id/user_following"
-                        android:text="Following" />
+                        android:text="@string/following" />
 
                     <TextView
+                        android:text="@{String.valueOf(viewmodel.user.following)}"
                         android:id="@+id/user_following"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/user_joined_at"
                         android:layout_marginEnd="8dp"
-                        android:layout_toEndOf="@id/followers"
-                        android:text="0" />
+                        android:layout_toEndOf="@id/followers" />
 
 
                     <TextView
@@ -116,16 +122,16 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/user_joined_at"
                         android:layout_toEndOf="@id/user_repositories"
-                        android:text="Repositories" />
+                        android:text="@string/repositories" />
 
                     <TextView
                         android:id="@+id/user_repositories"
+                        android:text="@{String.valueOf(viewmodel.user.public_repos)}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/user_joined_at"
                         android:layout_marginEnd="8dp"
-                        android:layout_toEndOf="@id/following"
-                        android:text="12" />
+                        android:layout_toEndOf="@id/following" />
 
 
                 </RelativeLayout>

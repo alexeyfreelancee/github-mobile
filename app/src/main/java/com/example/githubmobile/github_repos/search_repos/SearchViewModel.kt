@@ -2,12 +2,12 @@ package com.example.githubmobile.github_repos.search_repos
 
 import android.view.View
 import androidx.lifecycle.*
-import com.example.githubmobile.data.GitRepositoryInterface
 import com.example.githubmobile.data.models.github_repository.GithubRepo
+import com.example.githubmobile.data.repository.GitRepository
 import com.example.githubmobile.utils.log
 import kotlinx.coroutines.launch
 
-class SearchActivityViewModel(private val repository: GitRepositoryInterface) : ViewModel() {
+class SearchActivityViewModel(private val repository: GitRepository) : ViewModel() {
     private var _repos = MutableLiveData<ArrayList<GithubRepo>>()
     var repos: LiveData<ArrayList<GithubRepo>> = _repos
 
@@ -34,7 +34,7 @@ class SearchActivityViewModel(private val repository: GitRepositoryInterface) : 
 
 @Suppress("UNCHECKED_CAST")
 class SearchActivityViewModelFactory(
-    private val repository: GitRepositoryInterface
+    private val repository: GitRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

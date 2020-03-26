@@ -7,11 +7,11 @@ import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun Activity.showToast(message: String){
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
+
+fun Activity.toast(msg: String){
+    Toast.makeText(this.applicationContext, msg, Toast.LENGTH_SHORT).show()
 }
-
 fun log(message:String){
     Log.d("TAGG", message)
 }
@@ -25,7 +25,7 @@ fun View.gone(){
     this.visibility= View.GONE
 }
 
- fun String.getDate(): String {
+fun String.parseDate(): String {
     val dateString = this.replace("[TZ]".toRegex(), " ")
     val date = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse(dateString)
     val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
@@ -33,4 +33,9 @@ fun View.gone(){
         return simpleDateFormat.format(date)
     }
     return "no date"
+}
+
+fun Date.getStringDate():String {
+    val simpleDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    return simpleDateFormat.format(this)
 }

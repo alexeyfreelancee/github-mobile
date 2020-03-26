@@ -1,17 +1,19 @@
 package com.example.githubmobile.home.feeds
 
 import androidx.lifecycle.*
-import com.example.githubmobile.data.GitRepositoryInterface
-import com.example.githubmobile.data.models.feed.Feed
-import com.example.githubmobile.user_profile.ProfileViewModel
+import com.example.githubmobile.data.repository.GitRepository
+import com.sun.syndication.feed.synd.SyndEntry
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FeedsViewModel(private val repository: GitRepositoryInterface) : ViewModel() {
+class FeedsViewModel(private val repository: GitRepository) : ViewModel() {
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
-    private val _feeds = MutableLiveData<ArrayList<Feed>>()
-    val feeds: LiveData<ArrayList<Feed>> = _feeds
+    private val _feeds = MutableLiveData<ArrayList<SyndEntry>>()
+    val feeds: LiveData<ArrayList<SyndEntry>> = _feeds
 
     init {
 
@@ -19,10 +21,10 @@ class FeedsViewModel(private val repository: GitRepositoryInterface) : ViewModel
     }
 
     fun loadFeeds() {
-        viewModelScope.launch{
-            _dataLoading.value = true
-            //    _feeds.value = repository.getFeeds()
-            _dataLoading.value = false
+        CoroutineScope(Dispatchers.IO).launch {
+            _dataLoading.postValue(true)
+            _feeds.postValue( repository.getFeeds())
+            _dataLoading.postValue(false)
         }
 
     }
@@ -30,7 +32,7 @@ class FeedsViewModel(private val repository: GitRepositoryInterface) : ViewModel
 
 @Suppress("UNCHECKED_CAST")
 class FeedsViewModelFactory(
-    private val repository: GitRepositoryInterface
+    private val repository: GitRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

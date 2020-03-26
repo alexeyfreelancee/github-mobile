@@ -1,4 +1,4 @@
-package com.example.githubmobile.data.models
+package com.example.githubmobile.data.models.repos_list
 
 import com.example.githubmobile.data.models.github_repository.GithubRepo
 import com.google.gson.annotations.SerializedName

@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.githubmobile.R
-import com.example.githubmobile.data.models.feed.Feed
+import com.example.githubmobile.utils.getStringDate
+import com.sun.syndication.feed.synd.SyndEntry
+import com.sun.syndication.feed.synd.SyndFeed
 import kotlinx.android.synthetic.main.feed_row.view.*
 
 class FeedsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val items = ArrayList<Feed>()
+    private var items = ArrayList<SyndEntry>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.feed_row, parent, false)
@@ -30,25 +33,24 @@ class FeedsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bind(item: Feed){
+        fun bind(item: SyndEntry){
             itemView.apply {
-                //TODO
+
                 setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(item.toString())
+                    intent.data = Uri.parse(item.link)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     itemView.context.startActivity(intent)
                 }
-                text.text = item.toString()
-                time.text = item.toString()
-                Glide.with(context)
-                    .load(item.toString())
-                    .into(icon)
+
+                text.text = item.title
+                time.text = item.publishedDate.getStringDate()
+
             }
         }
     }
 
-    fun createNewList(newList: ArrayList<Feed>){
+    fun createNewFeed(newList: ArrayList<SyndEntry>){
         items.clear()
         items.addAll(newList)
         notifyDataSetChanged()

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubmobile.R
 import com.example.githubmobile.data.models.issue.Issue
-import com.example.githubmobile.utils.getDate
+import com.example.githubmobile.utils.parseDate
 import com.example.githubmobile.utils.log
 import kotlinx.android.synthetic.main.issue_row.view.*
 import java.lang.Exception
@@ -38,7 +38,7 @@ class IssuesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     title.text = issue.title
                     repo_name.text =
                         issue.repositoryUrl.replace("https://api.github.com/repos/".toRegex(), "")
-                    time.text = issue.createdAt.getDate()
+                    time.text = issue.createdAt.parseDate()
                     setOnClickListener {
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.data = Uri.parse(issue.htmlUrl)

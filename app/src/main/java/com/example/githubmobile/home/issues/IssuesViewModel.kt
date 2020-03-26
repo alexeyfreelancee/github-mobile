@@ -1,12 +1,12 @@
 package com.example.githubmobile.home.issues
 
 import androidx.lifecycle.*
-import com.example.githubmobile.data.GitRepositoryInterface
 import com.example.githubmobile.data.models.issue.Issue
+import com.example.githubmobile.data.repository.GitRepository
 
 import kotlinx.coroutines.launch
 
-class IssuesViewModel(private val repository: GitRepositoryInterface) : ViewModel() {
+class IssuesViewModel(private val repository: GitRepository) : ViewModel() {
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
@@ -29,7 +29,7 @@ class IssuesViewModel(private val repository: GitRepositoryInterface) : ViewMode
 }
 @Suppress("UNCHECKED_CAST")
 class IssuesViewModelFactory(
-    private val repository: GitRepositoryInterface
+    private val repository: GitRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

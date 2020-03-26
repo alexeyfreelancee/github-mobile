@@ -1,8 +1,6 @@
 package com.example.githubmobile
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -14,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.example.githubmobile.authorization.AuthorizationActivity
+import com.example.githubmobile.data.networking.RetrofitClient
 import com.example.githubmobile.github_repos.my_repos.GithubReposActivity
 import com.example.githubmobile.github_repos.search_repos.SearchActivity
 import com.example.githubmobile.home.feeds.FeedsFragment
@@ -23,7 +22,6 @@ import com.example.githubmobile.user_profile.ProfileActivity
 import com.example.githubmobile.user_profile.ProfileViewModel
 import com.example.githubmobile.user_profile.UserViewModelFactory
 import com.example.githubmobile.utils.SharedPrefsProvider
-import com.example.githubmobile.utils.showToast
 import com.example.githubmobile.utils.visible
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -41,7 +39,7 @@ class PlaceHolderActivity : AppCompatActivity(),
     override val kodein by kodein()
     private val factory: UserViewModelFactory by instance()
     private lateinit var profileViewModel: ProfileViewModel
-    private val prefs: SharedPrefsProvider by instance()
+    private val sharedPrefsProvider: SharedPrefsProvider by instance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,7 +127,7 @@ class PlaceHolderActivity : AppCompatActivity(),
             }
 
             R.id.nav_logout -> {
-                prefs.removeAccessToken()
+                sharedPrefsProvider.removeAccessKey()
                 startActivity(Intent(applicationContext, AuthorizationActivity::class.java))
                 finish()
             }

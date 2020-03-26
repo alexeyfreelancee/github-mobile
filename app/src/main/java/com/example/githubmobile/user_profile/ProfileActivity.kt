@@ -4,16 +4,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.githubmobile.R
-import com.example.githubmobile.data.models.User
+import com.example.githubmobile.data.models.user.User
 import com.example.githubmobile.databinding.ActivityProfileBinding
-import com.example.githubmobile.utils.log
 import kotlinx.android.synthetic.main.activity_profile.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -69,12 +67,6 @@ class ProfileActivity : AppCompatActivity(), KodeinAware {
         Glide.with(applicationContext)
             .load(user.avatar_url)
             .into(user_image)
-        user_username.text = user.login
-        user_country.text = user.location
-        user_joined_at.text = user.created_at
-        user_followers.text = user.followers.toString()
-        user_following.text = user.following.toString()
-        user_repositories.text = user.public_repos.toString()
         card_user.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(user.html_url)

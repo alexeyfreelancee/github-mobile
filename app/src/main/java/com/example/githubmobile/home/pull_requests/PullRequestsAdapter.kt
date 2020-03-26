@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubmobile.R
 import com.example.githubmobile.data.models.pull_request.PullRequest
-import com.example.githubmobile.utils.getDate
+import com.example.githubmobile.utils.parseDate
 import kotlinx.android.synthetic.main.pull_request_row.view.*
 
 class PullRequestsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -34,7 +34,7 @@ class PullRequestsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             itemView.apply {
                 repo_name.text = item.url.replace("https://api.github.com/repos/".toRegex(), "")
                 title.text = item.title
-                time.text = item.createdAt.getDate()
+                time.text = item.createdAt.parseDate()
                 setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.data = Uri.parse(item.htmlUrl)
